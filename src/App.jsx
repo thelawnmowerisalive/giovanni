@@ -1,34 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
+import './App.css';
+import rocketLogo from './assets/rocket-solid.svg';
+import TeamView from './components/TeamView';
+import LanguageContext from './LanguageContext';
+import Pokedex from './model/Pokedex';
+import RocketTrainer from './model/RocketTrainer';
+import Trainer from './model/Trainer';
+import Battle from './battle/Battle';
+import BattleView from './components/BattleView';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [ready, setReady] = useState(false);
+  const [battle, setBattle] = useState(undefined);
+
+  useEffect(() => {
+    const initialize = async () => {
+      await Pokedex.initialize();
+      setReady(Pokedex.INSTANCE.ready);
+    }
+    initialize();
+  }, []);
+
+  const trainer = new Trainer("Trainer", 42);
+  const rocket = new RocketTrainer("Giovanni", 42, 1.15);
+  if (ready) {
+    ["PERSIAN", "KINGDRA", "CRESSELIA"].forEach(name => {
+      rocket.team.push(rocket.train(Pokedex.INSTANCE.pokemon[name]));
+    });
+    console.log(rocket);
+  }
+
+  const simulate = () => {
+    const battle = new Battle(trainer, rocket).simulate();
+    console.log(battle);
+    setBattle(battle);
+  }
 
   return (
-    <>
+    <LanguageContext.Provider value='English'>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <img src={rocketLogo} className="logo" alt="Rocket logo" />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      {ready &&
+        <>
+          <TeamView trainer={trainer}></TeamView>
+          <TeamView trainer={rocket} rocket={true}></TeamView>
+
+          <button id="battle" onClick={simulate}>
+            BATTLE
+          </button>
+
+          {battle && <BattleView battle={battle} />}
+        </>
+      }
+    </LanguageContext.Provider>
   )
 }
 

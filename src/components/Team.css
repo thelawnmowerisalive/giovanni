@@ -1,0 +1,9 @@
+.team .compact {
+    display: flex;
+    gap: 20px;
+}
+
+.team .compact button {
+    flex: 1 1 0px;
+    min-width: 0;
+}
