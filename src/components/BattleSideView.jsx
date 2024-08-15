@@ -1,6 +1,6 @@
 import { ID } from "../battle/Turn";
 
-export default function BattleSideView({ battle, left, onEventSelection }) {
+export default function BattleSideView({ battle, left, onSelectTurn }) {
 
     const events = battle.log.map(turn => {
         const side = left ? turn.left : turn.right;
@@ -21,7 +21,7 @@ export default function BattleSideView({ battle, left, onEventSelection }) {
         }
 
         return (
-            <td className="event" key={turn.count + '+' + turn.over}>
+            <td className="event" onMouseMove={() => onSelectTurn(turn)} key={turn.count + '+' + turn.over}>
                 {icon}
                 {/* <Popup content={side.text} disabled={!side.text} trigger={icon} onOpen={selectEvent}></Popup> */}
             </td>
@@ -35,7 +35,7 @@ export default function BattleSideView({ battle, left, onEventSelection }) {
     )
 }
 
-function Icon({ name, color, size }) {
+function Icon({ name, color, size, onClick }) {
     const style = { backgroundColor: color };
     return <i
         className={`icon ${name} ${size}`}

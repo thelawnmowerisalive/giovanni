@@ -1,18 +1,13 @@
 import BattleSideView from "./BattleSideView";
 import "./Battle.css";
 
-export default function BattleView({ battle }) {
-
-    const handleEventSelection = () => {
-        
-    }
-
+export default function BattleView({ battle, onSelectTurn }) {
     return (
         <div className="battle">
             <table>
                 <tbody>
-                    <BattleSideView battle={battle} onEventSelection={handleEventSelection} left />
-                    <BattleSideView battle={battle} onEventSelection={handleEventSelection} />
+                    <BattleSideView battle={battle} onSelectTurn={onSelectTurn} left />
+                    <BattleSideView battle={battle} onSelectTurn={onSelectTurn} />
                 </tbody>
             </table>
         </div>

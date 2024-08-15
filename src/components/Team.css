@@ -6,4 +6,5 @@
 .team .compact button {
     flex: 1 1 0px;
     min-width: 0;
+    position: relative;
 }

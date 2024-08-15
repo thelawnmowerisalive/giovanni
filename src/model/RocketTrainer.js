@@ -6,7 +6,7 @@ export default class RocketTrainer extends Trainer {
         super(name, level);
         this.rank = rank;
 
-        this.strategy.shields = "never";
+        this.strategy.shields = "always";
     }
 
     train(base, _level_, _ivs_, moves) {

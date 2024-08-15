@@ -7,8 +7,10 @@ import PokemonDetailsModal from "./PokemonDetailsModal";
 /**
  * @param {Props} 
  */
-export default function TeamView({ trainer }) {
+export default function TeamView({ trainer, status }) {
     const [mode, setMode] = useState('');
+
+    console.log(status);
 
     const handleAddPokemon = () => {
         setMode(ADD_MODE);
@@ -43,6 +45,8 @@ export default function TeamView({ trainer }) {
                         <PokemonCompactView
                             key={index}
                             pokemon={pokemon}
+                            HP={status?.HP[index]}
+                            energy={status?.energy[index]}
                             onClick={() => handleEditPokemon(index)}
                         />)
                     }

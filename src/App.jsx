@@ -11,9 +11,10 @@ import BattleView from './components/BattleView';
 
 function App() {
   const [ready, setReady] = useState(false);
-  const [trainer, setTrainer] = useState(undefined);
-  const [rocket, setRocket] = useState(undefined);
-  const [battle, setBattle] = useState(undefined);
+  const [trainer, setTrainer] = useState();
+  const [rocket, setRocket] = useState();
+  const [battle, setBattle] = useState();
+  const [turn, setTurn] = useState();
 
   /**
    * Initialize the pokedex on first render.
@@ -54,14 +55,14 @@ function App() {
       {
         ready && trainer && rocket &&
         <>
-          <TeamView trainer={trainer}></TeamView>
-          <TeamView trainer={rocket} rocket={true}></TeamView>
+          <TeamView trainer={trainer} status={turn?.left}></TeamView>
+          <TeamView trainer={rocket} status={turn?.right}></TeamView>
 
           <button id="battle" onClick={simulate}>
             BATTLE
           </button>
 
-          {battle && <BattleView battle={battle} />}
+          {battle && <BattleView battle={battle} onSelectTurn={setTurn} />}
         </>
       }
     </LanguageContext.Provider>
