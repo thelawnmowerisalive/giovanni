@@ -1,4 +1,5 @@
 import BattleSideView from "./BattleSideView";
+import "./Battle.css";
 
 export default function BattleView({ battle }) {
 

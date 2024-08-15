@@ -1,0 +1,41 @@
+.battle {
+    overflow: auto;
+    padding: 0 5px;
+}
+
+.icon {
+    display: block;
+    mask-size: cover;
+    margin: auto;
+    width: 16px;
+    height: 16px;
+}
+
+.icon.large {
+    width: 24px;
+    height: 24px;
+}
+
+.icon.fast_move {
+    mask-image: url(/src/assets/square-full-solid.svg);
+}
+
+.icon.charged_move {
+    mask-image: url(/src/assets/circle-solid.svg);
+}
+
+.icon.charging {
+    mask-image: url(/src/assets/forward-solid.svg);
+}
+
+.icon.shielding {
+    mask-image: url(/src/assets/shield-halved-solid.svg);
+}
+
+.icon.switch_in {
+    mask-image: url(/src/assets/rotate-solid.svg);
+}
+
+.icon.fainted {
+    mask-image: url(/src/assets/circle-xmark-regular.svg);
+}

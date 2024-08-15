@@ -7,17 +7,17 @@ export default function BattleSideView({ battle, left, onEventSelection }) {
         var icon = <div></div>
 
         if (side.type === ID.FAST_MOVE) {
-            icon = <Icon key={turn.count + '+' + turn.over} name="square-solid" style={{ color: COLORS[side.data.type] }} size="small" />;
+            icon = <Icon key={turn.count + '+' + turn.over} name="fast_move" color={COLORS[side.data.type]} size="small" />;
         } else if (side.type === ID.CHARGED_MOVE) {
-            icon = <Icon key={turn.count + '+' + turn.over} name="circle-solid" style={{ color: COLORS[side.data.type] }} size="large" />;
+            icon = <Icon key={turn.count + '+' + turn.over} name="charged_move" color={COLORS[side.data.type]} size="large" />;
         } else if (side.type === ID.CHARGING) {
-            icon = <Icon key={turn.count + '+' + turn.over} name="forward-solid" color="grey" size="large" />;
+            icon = <Icon key={turn.count + '+' + turn.over} name="charging" color="grey" size="large" />;
         } else if (side.type === ID.SHIELDING) {
-            icon = <Icon key={turn.count + '+' + turn.over} name="shield-halved-solid" color="pink" size="large" />;
+            icon = <Icon key={turn.count + '+' + turn.over} name="shielding" color="pink" size="large" />;
         } else if (side.type === ID.SWITCH_IN) {
-            icon = <Icon key={turn.count + '+' + turn.over} name="rotate-solid" color="grey" size="large" />;
+            icon = <Icon key={turn.count + '+' + turn.over} name="switch_in" color="grey" size="large" />;
         } else if (side.type === ID.FAINTED) {
-            icon = <Icon key={turn.count + '+' + turn.over} name="circle-xmark-regular" color="red" fontSize="large" />;
+            icon = <Icon key={turn.count + '+' + turn.over} name="fainted" color="red" size="large" />;
         }
 
         return (
@@ -35,13 +35,11 @@ export default function BattleSideView({ battle, left, onEventSelection }) {
     )
 }
 
-function Icon({ name, style, color, size }) {
-    const src = "./src/assets/" + name + ".svg";
-    const s = {...style, width: "15px", height: "15px"};
-    return <img
-        src={src}
-        className="side"
-        style={s}
+function Icon({ name, color, size }) {
+    const style = { backgroundColor: color };
+    return <i
+        className={`icon ${name} ${size}`}
+        style={style}
     />
 }
 

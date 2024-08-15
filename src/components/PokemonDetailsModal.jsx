@@ -5,7 +5,7 @@ import Pokemon from "../model/Pokemon";
 import RocketTrainer from "../model/RocketTrainer";
 import Stats from "../model/Stats";
 import Trainer from "../model/Trainer";
-import Modal from "./modal";
+import Modal from "./Modal";
 import MoveSelect from "./select/MoveSelect";
 import StatSelect from "./select/StatSelect";
 
