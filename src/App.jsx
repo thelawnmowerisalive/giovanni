@@ -11,8 +11,13 @@ import BattleView from './components/BattleView';
 
 function App() {
   const [ready, setReady] = useState(false);
+  const [trainer, setTrainer] = useState(undefined);
+  const [rocket, setRocket] = useState(undefined);
   const [battle, setBattle] = useState(undefined);
 
+  /**
+   * Initialize the pokedex on first render.
+   */
   useEffect(() => {
     const initialize = async () => {
       await Pokedex.initialize();
@@ -21,14 +26,19 @@ function App() {
     initialize();
   }, []);
 
-  const trainer = new Trainer("Trainer", 42);
-  const rocket = new RocketTrainer("Giovanni", 42, 1.15);
-  if (ready) {
+  useEffect(() => {
+    if (!ready) {
+      return;
+    }
+
+    setTrainer(new Trainer("Trainer", 42));
+    const giovanni = new RocketTrainer("Giovanni", 42, 1.15);
     ["PERSIAN", "KINGDRA", "CRESSELIA"].forEach(name => {
-      rocket.team.push(rocket.train(Pokedex.INSTANCE.pokemon[name]));
+      giovanni.team.push(giovanni.train(Pokedex.INSTANCE.pokemon[name]));
     });
-    console.log(rocket);
-  }
+    setRocket(giovanni);
+    console.log(giovanni);
+  }, [ready]);
 
   const simulate = () => {
     const battle = new Battle(trainer, rocket).simulate();
@@ -41,7 +51,8 @@ function App() {
       <div>
         <img src={rocketLogo} className="logo" alt="Rocket logo" />
       </div>
-      {ready &&
+      {
+        ready && trainer && rocket &&
         <>
           <TeamView trainer={trainer}></TeamView>
           <TeamView trainer={rocket} rocket={true}></TeamView>
@@ -57,4 +68,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

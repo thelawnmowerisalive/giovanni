@@ -1,0 +1,25 @@
+.icon {
+    display: block;
+    mask-size: cover;
+    margin: auto;
+    width: 20px;
+    height: 20px;
+    background-color: black;
+}
+
+.icon.download {
+    mask-image: url(/src/assets/download-solid.svg);
+}
+
+.icon.upload {
+    mask-image: url(/src/assets/upload-solid.svg);
+}
+
+.icon.search {
+    mask-image: url(/src/assets/magnifying-glass-solid.svg);
+}
+
+button[disabled] i {
+    background-color: grey;
+    user-select: none;
+}
