@@ -1,34 +1,42 @@
 import { useContext, useEffect, useState } from "react";
 import LanguageContext from "../../LanguageContext";
 import Pokedex from "../../model/Pokedex";
+import PokemonStorage from "../../PokemonStorage";
 
+/**
+ * Allows Pokemon selection by name (searching in the dex), 
+ * from a predefined list, or from local storage.
+ */
 export default function PokemonSelect({ id, label, value, onChange, list }) {
     const language = useContext(LanguageContext);
-    const [options, setOptions] = useState(undefined);
     const [searchMode, setSearchMode] = useState(false);
 
-    useEffect(() => {
-        if (list) {
-            setSearchMode(false);
-            setOptions([
-                <option key="" value="" disabled>Select from cache...</option>,
-                list.map(key => (
-                    <option key={key} value={key}>
-                        {Pokedex.INSTANCE.pokemon[key].names[language]}
-                    </option>
-                )),
-                <option key="reset" value="reset" className="italic">Or add new...</option>]);
-        } else {
-            setSearchMode(true);
-            setOptions(undefined);
-        }
-    }, [list]);
+    const createOptions = (keys => keys.map(key => (
+        <option key={key} value={key}>
+            {Pokedex.INSTANCE.pokemon[key].names[language]}
+        </option>
+    )));
 
-    useEffect(() => {
-        console.log(searchMode);
-    }, [searchMode]);
+    /**
+     * Create options from the pre-defined list, or from the index
+     * in local storage (if there are more than 3 Pokemon saved).
+     */
+    const [options, setOptions] = useState(() => {
+        if (list) {
+            return createOptions(list);
+        } else if (!searchMode) {
+            const index = PokemonStorage.index;
+            if (index.length > 3) {
+                return createOptions(index);
+            }
+        }
+    });
 
     const switchMode = () => {
+        if (list) {
+            // allow only picking from the pre-defined list!
+            return;
+        }
         setSearchMode(searchMode => !searchMode);
     }
 
@@ -36,7 +44,7 @@ export default function PokemonSelect({ id, label, value, onChange, list }) {
         <div className="formItem">
             <label htmlFor={id}>{label}</label>
             {
-                searchMode
+                searchMode || !options
                     ? <input
                         id={id}
                         name={id}
@@ -52,10 +60,14 @@ export default function PokemonSelect({ id, label, value, onChange, list }) {
                         {options}
                     </select>
             }
-            <span
-                className={searchMode ? "icon download" : "icon search"}
-                onClick={switchMode}
-            />
+            {
+                // if there is no pre-defined list, we allow switching between cache/search
+                !list &&
+                <span
+                    className={searchMode ? "icon from-cache" : "icon search"}
+                    onClick={switchMode}
+                />
+            }
         </div>
     )
 }

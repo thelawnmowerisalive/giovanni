@@ -1,8 +1,9 @@
 import { useState } from "react";
 import Trainer from "../model/Trainer";
 import PokemonCompactView from "./PokemonCompactView";
-import "./Team.css";
 import PokemonDetailsModal from "./PokemonDetailsModal";
+import "./Team.css";
+import PokemonStorage from "../PokemonStorage";
 
 /**
  * @param {Props} 
@@ -24,7 +25,7 @@ export default function TeamView({ trainer, status }) {
         setMode('');
         if (pokemon) {
             trainer.team.push(pokemon);
-            console.log(trainer);
+            updateCache();
         }
     }
 
@@ -32,8 +33,13 @@ export default function TeamView({ trainer, status }) {
         setMode('');
         if (pokemon) {
             trainer.team[index] = pokemon;
-            console.log(trainer);
+            updateCache();
         }
+    }
+
+    const updateCache = () => {
+        console.log(trainer);
+        PokemonStorage.team = trainer.team.map(pokemon => pokemon.name);
     }
 
     return (

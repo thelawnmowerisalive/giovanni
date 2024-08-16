@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import rocketLogo from './assets/rocket-solid.svg';
+import Battle from './battle/Battle';
+import BattleView from './components/BattleView';
 import TeamView from './components/TeamView';
 import LanguageContext from './LanguageContext';
 import Pokedex from './model/Pokedex';
 import RocketTrainer from './model/RocketTrainer';
 import Trainer from './model/Trainer';
-import Battle from './battle/Battle';
-import BattleView from './components/BattleView';
+import PokemonStorage from './PokemonStorage';
 
 function App() {
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(Pokedex.INSTANCE.ready);
+
   const [trainer, setTrainer] = useState();
   const [rocket, setRocket] = useState();
   const [battle, setBattle] = useState();
@@ -32,12 +34,20 @@ function App() {
       return;
     }
 
-    setTrainer(new Trainer("Trainer", 42));
+    // initialize the trainer with pokemon from cache (if any)
+    const trainer = new Trainer("Trainer", 42);
+    PokemonStorage.team?.forEach(name => {
+      trainer.team.push(PokemonStorage.get(name));
+    });
+    setTrainer(trainer);
+
     const giovanni = new RocketTrainer("Giovanni", 42, 1.15);
     ["PERSIAN", "KINGDRA", "CRESSELIA"].forEach(name => {
       giovanni.team.push(giovanni.train(Pokedex.INSTANCE.pokemon[name]));
     });
     setRocket(giovanni);
+
+    console.log(trainer);
     console.log(giovanni);
   }, [ready]);
 

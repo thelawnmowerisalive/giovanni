@@ -5,11 +5,12 @@ import Pokemon from "../model/Pokemon";
 import RocketTrainer from "../model/RocketTrainer";
 import Stats from "../model/Stats";
 import Trainer from "../model/Trainer";
+import PokemonStorage from "../PokemonStorage";
 import Modal from "./Modal";
 import "./Pokemon.css";
 import MoveSelect from "./select/MoveSelect";
-import StatSelect from "./select/StatSelect";
 import PokemonSelect from "./select/PokemonSelect";
+import StatSelect from "./select/StatSelect";
 
 /**
  * @param {Props}
@@ -17,7 +18,7 @@ import PokemonSelect from "./select/PokemonSelect";
 export default function PokemonDetailsModal({ trainer, pokemon, onClose }) {
     const [name, setName] = useState(pokemon?.name || '');
 
-    const createDefaultState = (pokemon) => {
+    const createState = (pokemon) => {
         return {
             fastMove: pokemon?.moves?.fast || '',
             chargedMove: pokemon?.moves?.charged_1 || '',
@@ -27,20 +28,13 @@ export default function PokemonDetailsModal({ trainer, pokemon, onClose }) {
             level: pokemon?.level || trainer.level
         }
     }
-    const [state, setState] = useState(() => createDefaultState(pokemon));
+    const [state, setState] = useState(() => createState(pokemon));
 
     const [template, setTemplate] = useState(undefined);
     const [fastMoves, setFastMoves] = useState([]);
     const [chargedMoves, setChargedMoves] = useState([]);
 
     const [result, setResult] = useState(undefined);
-
-    const [cache, setCache] = useState(undefined);
-    useEffect(() => {
-        const list = localStorage.getItem("giovanni_saved_mon")?.split(";");
-        console.log(list);
-        setCache(list);
-    }, []);
 
     /**
      * Every time the name changes, we look up the pokemon in the dex.
@@ -60,16 +54,12 @@ export default function PokemonDetailsModal({ trainer, pokemon, onClose }) {
         } else {
             setFastMoves([]);
             setChargedMoves([]);
-            setState(createDefaultState());
+            setState(createState());
         }
 
-        if ("reset" === name) {
-            setCache(undefined);
-        }
-        if (cache && cache.indexOf(name) >= 0) {
-            // loading the pokemon from cache
-            const cached = JSON.parse(localStorage.getItem("giovanni_" + name));
-            setState(cached);
+        // load the pokemon from cache
+        if (PokemonStorage.index.includes(name)) {
+            setState(createState(PokemonStorage.get(name)));
         }
     }, [name]);
 
@@ -96,7 +86,6 @@ export default function PokemonDetailsModal({ trainer, pokemon, onClose }) {
      */
     const onChange = ({ target }) => {
         const { name, value, type } = target;
-        console.log(value);
         setState(prev => ({
             ...prev,
             [name]: ["number", "range"].indexOf(type) >= 0 ? Number.parseInt(value) : value
@@ -107,18 +96,7 @@ export default function PokemonDetailsModal({ trainer, pokemon, onClose }) {
         if (!result) {
             return;
         }
-        const { name } = result;
-        // first save the state
-        localStorage.setItem(
-            "giovanni_" + name,
-            JSON.stringify(state)
-        );
-        // then add it to the index, if it does not already exist
-        if (cache.indexOf(name) < 0) {
-            const list = [...cache, name];
-            setCache(list);
-            localStorage.setItem("giovanni_saved_mon", list.join(";"));
-        }
+        PokemonStorage.put(name, result);
     }
 
     const notRocket = !(trainer instanceof RocketTrainer);
@@ -132,7 +110,6 @@ export default function PokemonDetailsModal({ trainer, pokemon, onClose }) {
                         label="Name"
                         value={name}
                         onChange={({ target }) => setName(target.value)}
-                        list={cache}
                     />
                     <div>
                         CP {Math.floor(result?.CP)}
@@ -189,7 +166,7 @@ export default function PokemonDetailsModal({ trainer, pokemon, onClose }) {
                 {
                     notRocket &&
                     <button onClick={upload} disabled={!template}>
-                        <i className="icon upload" />
+                        <i className="icon to-cache" />
                     </button>
                 }
             </>

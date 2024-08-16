@@ -25,11 +25,11 @@
     background-color: black;
 }
 
-.icon.download {
+.icon.to-cache {
     mask-image: url(/src/assets/download-solid.svg);
 }
 
-.icon.upload {
+.icon.from-cache {
     mask-image: url(/src/assets/upload-solid.svg);
 }
 
