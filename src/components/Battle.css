@@ -1,6 +1,6 @@
 .battle {
-    overflow: auto;
-    padding: 0 5px;
+    overflow-x: auto;
+    padding-top: 16px;
 }
 
 .icon {

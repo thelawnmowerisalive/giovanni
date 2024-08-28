@@ -128,7 +128,13 @@ export default class Battle {
 
             // deal damage
             const damage = shielding ?
-                { amount: 0, eff: 1, type: move.type.substring(13) }
+                { 
+                    amount: 0, 
+                    eff: 1, 
+                    attacker: attacker.pokemon.name,
+                    defender: defender.pokemon.name,
+                    type: move.type.substring(13) 
+                }
                 : this.damageFormula(move, attacker, defender);
             defender.HP -= damage.amount;
 
@@ -261,6 +267,8 @@ export default class Battle {
         return {
             eff,
             type,
+            attacker: attacker.pokemon.name,
+            defender: defender.pokemon.name,
             amount: Math.floor(1 + (0.5 * move.power * (attack / defense) * modifier))
         };
     }

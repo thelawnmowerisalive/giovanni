@@ -1,4 +1,10 @@
+import Pokemon from "../model/Pokemon";
+
 export default class PokemonState {
+    /**
+     * 
+     * @param {Pokemon} pokemon 
+     */
     constructor(pokemon) {
         this.pokemon = pokemon;
 

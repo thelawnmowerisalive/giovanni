@@ -53,6 +53,7 @@ export default function TeamView({ trainer, status }) {
                             pokemon={pokemon}
                             HP={status?.HP[index]}
                             energy={status?.energy[index]}
+                            attacker={status?.data?.attacker === pokemon.name}
                             onClick={() => handleEditPokemon(index)}
                         />)
                     }

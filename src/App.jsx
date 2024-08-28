@@ -59,22 +59,24 @@ function App() {
 
   return (
     <LanguageContext.Provider value='English'>
-      <div>
-        <img src={rocketLogo} className="logo" alt="Rocket logo" />
+      <div className="main">
+        <div>
+          <img src={rocketLogo} className="logo" alt="Rocket logo" />
+        </div>
+        {
+          ready && trainer && rocket &&
+          <>
+            <TeamView trainer={trainer} status={turn?.left}></TeamView>
+            <TeamView trainer={rocket} status={turn?.right}></TeamView>
+
+            <button id="battle" onClick={simulate}>
+              BATTLE
+            </button>
+          </>
+        }
       </div>
-      {
-        ready && trainer && rocket &&
-        <>
-          <TeamView trainer={trainer} status={turn?.left}></TeamView>
-          <TeamView trainer={rocket} status={turn?.right}></TeamView>
+      {battle && <BattleView battle={battle} onSelectTurn={setTurn} />}
 
-          <button id="battle" onClick={simulate}>
-            BATTLE
-          </button>
-
-          {battle && <BattleView battle={battle} onSelectTurn={setTurn} />}
-        </>
-      }
     </LanguageContext.Provider>
   )
 }
